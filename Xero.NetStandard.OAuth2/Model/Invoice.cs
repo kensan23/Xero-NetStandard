@@ -39,28 +39,34 @@ namespace Xero.NetStandard.OAuth2.Model
         public enum TypeEnum
         {
             /// <summary>
-            /// Enum ACCREC for value: ACCREC
-            /// </summary>
-            [EnumMember(Value = "ACCREC")]
-            ACCREC = 1,
-
-            /// <summary>
             /// Enum ACCPAY for value: ACCPAY
             /// </summary>
             [EnumMember(Value = "ACCPAY")]
-            ACCPAY = 2,
+            ACCPAY = 1,
 
             /// <summary>
             /// Enum ACCPAYCREDIT for value: ACCPAYCREDIT
             /// </summary>
             [EnumMember(Value = "ACCPAYCREDIT")]
-            ACCPAYCREDIT = 3,
+            ACCPAYCREDIT = 2,
 
             /// <summary>
             /// Enum AROVERPAYMENT for value: AROVERPAYMENT
             /// </summary>
             [EnumMember(Value = "AROVERPAYMENT")]
-            AROVERPAYMENT = 4
+            AROVERPAYMENT = 3,
+
+            /// <summary>
+            /// Enum ACCREC for value: ACCREC
+            /// </summary>
+            [EnumMember(Value = "ACCREC")]
+            ACCREC = 4,
+
+            /// <summary>
+            /// Enum ACCRECCREDIT for value: ACCRECCREDIT
+            /// </summary>
+            [EnumMember(Value = "ACCRECCREDIT")]
+            ACCRECCREDIT = 5
 
         }
 
@@ -185,7 +191,7 @@ namespace Xero.NetStandard.OAuth2.Model
         /// </summary>
         /// <value>See BrandingThemes</value>
         [DataMember(Name="BrandingThemeID", EmitDefaultValue=false)]
-        public Guid BrandingThemeID { get; set; }
+        public Guid? BrandingThemeID { get; set; }
 
         /// <summary>
         /// URL link to a source document – shown as “Go to [appName]” in the Xero app
@@ -225,6 +231,13 @@ namespace Xero.NetStandard.OAuth2.Model
         public DateTime? PlannedPaymentDate { get; set; }
 
         /// <summary>
+        /// CIS deduction for UK contractors
+        /// </summary>
+        /// <value>CIS deduction for UK contractors</value>
+        [DataMember(Name="CISDeduction", EmitDefaultValue=false)]
+        public double? CISDeduction { get; private set; }
+
+        /// <summary>
         /// Total of invoice excluding taxes
         /// </summary>
         /// <value>Total of invoice excluding taxes</value>
@@ -257,7 +270,7 @@ namespace Xero.NetStandard.OAuth2.Model
         /// </summary>
         /// <value>Xero generated unique identifier for invoice</value>
         [DataMember(Name="InvoiceID", EmitDefaultValue=false)]
-        public Guid InvoiceID { get; set; }
+        public Guid? InvoiceID { get; set; }
 
         /// <summary>
         /// boolean to indicate if an invoice has an attachment
@@ -389,6 +402,7 @@ namespace Xero.NetStandard.OAuth2.Model
             sb.Append("  SentToContact: ").Append(SentToContact).Append("\n");
             sb.Append("  ExpectedPaymentDate: ").Append(ExpectedPaymentDate).Append("\n");
             sb.Append("  PlannedPaymentDate: ").Append(PlannedPaymentDate).Append("\n");
+            sb.Append("  CISDeduction: ").Append(CISDeduction).Append("\n");
             sb.Append("  SubTotal: ").Append(SubTotal).Append("\n");
             sb.Append("  TotalTax: ").Append(TotalTax).Append("\n");
             sb.Append("  Total: ").Append(Total).Append("\n");
@@ -517,6 +531,10 @@ namespace Xero.NetStandard.OAuth2.Model
                     this.PlannedPaymentDate == input.PlannedPaymentDate ||
                     (this.PlannedPaymentDate != null &&
                     this.PlannedPaymentDate.Equals(input.PlannedPaymentDate))
+                ) && 
+                (
+                    this.CISDeduction == input.CISDeduction ||
+                    this.CISDeduction.Equals(input.CISDeduction)
                 ) && 
                 (
                     this.SubTotal == input.SubTotal ||
@@ -651,6 +669,7 @@ namespace Xero.NetStandard.OAuth2.Model
                     hashCode = hashCode * 59 + this.ExpectedPaymentDate.GetHashCode();
                 if (this.PlannedPaymentDate != null)
                     hashCode = hashCode * 59 + this.PlannedPaymentDate.GetHashCode();
+                hashCode = hashCode * 59 + this.CISDeduction.GetHashCode();
                 hashCode = hashCode * 59 + this.SubTotal.GetHashCode();
                 hashCode = hashCode * 59 + this.TotalTax.GetHashCode();
                 hashCode = hashCode * 59 + this.Total.GetHashCode();
